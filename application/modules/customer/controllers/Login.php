@@ -10,16 +10,10 @@ class Login extends MY_Controller
 		$this->load->model('user_model');
 	}
 
-	public function index()
-	{
-		// $data = array(
-		// 	'content' => 'login/main'
-		// );
-		// $this->load->view($data['content'], $data);
-	}
-
 	public function login_cust()
 	{
+		if (is_customer_authorized())
+			redirect(base_url());
 		$data = array(
 			'content' => 'login/main'
 		);
@@ -89,7 +83,7 @@ class Login extends MY_Controller
 		$data_user['email']		= $this->input->post('email');
 		$data_user['adress']	= $this->input->post('adress');
 		$password				= $this->input->post('pass');
-		
+
 		$where_email = array(
 			'email = ' . $this->db->escape($data_user['email']) => null
 		);

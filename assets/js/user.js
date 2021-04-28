@@ -45,7 +45,7 @@ function act_login_customer(form) {
 				swal
 					.fire("success", res.message || "Login sukses", "success")
 					.then(() => {
-						window.location = site_url;
+						window.location.reload();
 					});
 			}
 		})
