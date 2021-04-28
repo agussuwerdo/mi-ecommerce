@@ -211,4 +211,18 @@ class Order extends MY_Controller
 			success('Order Successfully Placed');
 		}
 	}
+	
+	public function sales_detail($invoice_number)
+	{
+		$sales_row = $this->sales_model->find_one($invoice_number);
+		$this->sales_item_model->set_where(array('invoice_number' => $invoice_number));
+		$sales_detail_list = $this->sales_item_model->find();
+		$data = array(
+			'content' => 'profile/sales_detail',
+			'invoice_number' => $invoice_number,
+			'sales_row' => $sales_row,
+			'sales_detail_list' => $sales_detail_list
+		);
+		$this->load->view($data['content'], $data);
+	}
 }

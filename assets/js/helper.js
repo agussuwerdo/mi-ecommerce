@@ -132,7 +132,7 @@ function view_sales_detail(invoice_number) {
 			Swal.showLoading();
 			$.ajax({
 				type: "GET",
-				url: site_url + "customer/profile/sales_detail/" + invoice_number,
+				url: site_url + "customer/order/sales_detail/" + invoice_number,
 				data: {},
 				dataType: "html",
 				success: function (response) {
