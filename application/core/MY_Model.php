@@ -345,19 +345,6 @@ class MY_Model extends CI_Model
 	}
 
 	/**
-	 * Get last auto number {only for single pk field}
-	 * @return string auto number
-	 */
-	function get_last_id($pk_field = '')
-	{
-		$query = 'SELECT COALESCE(max(' . $this->db->protect_identifiers($pk_field ?: $this->single_primary()) . '),0) as ' . $this->db->protect_identifiers('max_id') . '
-					FROM ' . $this->table_name() . '';
-		$query = $this->db->query($query);
-		$row = $query->row_array();
-		return $row['max_id'];
-	}
-
-	/**
 	 * Generate auto number {only for single pk field}
 	 * @return string auto number
 	 */
@@ -387,16 +374,4 @@ class MY_Model extends CI_Model
 		return $no;
 	}
 
-	/**
-	 * Generate value recnum where first primary key 
-	 * @return Int last max recnum
-	 */
-	function get_recnum($transnum, $field = 'recnum')
-	{
-		$this->db->select('COALESCE(max(' . $this->db->protect_identifiers($field ?: $this->primaryKey[1]) . '),0) as ' . $this->db->protect_identifiers('max_id'));
-		$this->db->where($this->single_primary(), $transnum);
-		$query = $this->db->get($this->table_name());
-		$row = $query->row_array();
-		return $row['max_id'] + 1;
-	}
 }
