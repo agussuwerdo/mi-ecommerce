@@ -86,11 +86,12 @@ class Sales_model extends MY_Model
 		$this->db->select('MONTHNAME( sales_date ) AS month_name', false);
 		$this->db->select('YEAR( sales_date ) AS year_name', false);
 
-		$this->db->group_by('year_name', 'month_name');
+		$this->db->group_by(array('year_name','month_name'));
 		$compiled_select = $this->db->get_compiled_select($this->table_name() . ' t1');
 
 		$this->db->reset_query();
 
+		// Select count of rows from the compiled subquery
 		$this->db->select('count(*) as num_rows', false);
 
 		if ($this->where) {
@@ -114,7 +115,7 @@ class Sales_model extends MY_Model
 		$this->db->select('MONTHNAME( sales_date ) AS month_name', false);
 		$this->db->select('YEAR( sales_date ) AS year_name', false);
 
-		$this->db->group_by('year_name', 'month_name');
+		$this->db->group_by(array('year_name','month_name'));
 		$compiled_select = $this->db->get_compiled_select($this->table_name() . ' t1');
 
 		$this->db->reset_query();
