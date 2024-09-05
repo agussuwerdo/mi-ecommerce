@@ -62,6 +62,12 @@ migrate: ## start the database migration
 	@echo "Running migrations..."
 	docker exec -it mi_ecommerce_php php index.php migration
 
+# Run composer install inside the PHP container
+.PHONY: composer-install
+composer-install: ## Install Composer dependencies inside the PHP container
+	@echo "Running composer install in the PHP container..."
+	docker exec -it mi_ecommerce_php composer install --no-interaction --prefer-dist
+
 # Display this help message
 .PHONY: help
 help: ## Show this help message
