@@ -22,12 +22,12 @@ class Product extends MY_Controller
 	{
 		$this->bc->set_title('List Product');
 		$this->bc->add('List Product', base_url('customer/product'));
-		
+
 		$limit = 8;
 		$per_page = $this->input->get('per_page') ? (ceiling($this->input->get('per_page'), $limit)) : 0;
-		$search_value = strtolower($this->input->get('q'));
-		$category = strtolower($this->input->get('cat'));
-		$sub_category = strtolower($this->input->get('subcat'));
+		$search_value = strtolower($this->input->get('q') ?? '');
+		$category = strtolower($this->input->get('cat') ?? '');
+		$sub_category = strtolower($this->input->get('subcat') ?? '');
 
 		$where = array();
 
@@ -42,7 +42,7 @@ class Product extends MY_Controller
 			if ($sub_category != 'all') {
 				$where['lower(f_sub_category_code)'] = $sub_category;
 				$get_sub_category = $this->sub_category_model->find_one(array('f_category_code' => $category, 'sub_category_code' => $sub_category));
-				$this->bc->add($get_sub_category['sub_category_name'], base_url('product?cat=' . $category.'&subcat=' . $get_sub_category['sub_category_code']));
+				$this->bc->add($get_sub_category['sub_category_name'], base_url('product?cat=' . $category . '&subcat=' . $get_sub_category['sub_category_code']));
 			}
 
 		if ($search_value) {
@@ -82,8 +82,8 @@ class Product extends MY_Controller
 			$user_id = $this->session->userdata('customer_user_id');
 		$product = $this->product_model->find_one(array('slug' => $slug));
 
-		if(!$product['item_id'])
-		return_404();
+		if (!$product['item_id'])
+			return_404();
 
 		$this->product_model->set_select('DISTINCT(item_id),name,price,discount,slug');
 		$this->product_model->set_order('rand()');

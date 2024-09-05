@@ -36,39 +36,6 @@
  * @since	Version 1.0.0
  * @filesource
  */
-/*
- * --------------------------------------------------------------------
- * CUSTOM FUNCTION TO LOAD .ENV file
- * --------------------------------------------------------------------
- * 
-*/
-function psFileKeyVal($wFile, $d = "=")
-{
-	$res = array();
-	$ary = @file($wFile);
-	if (is_array($ary) == true) {
-		foreach ($ary as $line) {
-			$line = trim($line);
-			if (($line != "") && (substr($line, 0, 1) != "#")) {
-				list($key, $val) = explode($d, $line, 2);
-				$res[trim($key)] = trim($val);
-			}
-		}
-	}
-	return $res;
-}
-
-/*
- * --------------------------------------------------------------------
- * GET DEFAULT ROOT FOR Web
- * --------------------------------------------------------------------
- * 
-*/
-$root = getenv('APP_URL') ?: '';
-if (PHP_SAPI !== 'cli') {
-	$root  = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $_SERVER['HTTP_HOST'];
-	$root .= str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
-}
 
 /*
  *---------------------------------------------------------------
@@ -87,11 +54,7 @@ if (PHP_SAPI !== 'cli') {
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-$ENV = 'production';
-if (strpos($root, 'localhost') !== false)
-	$ENV = 'development';
-
-define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : $ENV);
+define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
 /*
  *---------------------------------------------------------------
@@ -131,7 +94,8 @@ switch (ENVIRONMENT) {
  * This variable must contain the name of your "system" directory.
  * Set the path if it is not in the same directory as this file.
  */
-$system_path = 'system';
+// $system_path = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'system';
+$system_path = __DIR__ . '/system';
 
 /*
  *---------------------------------------------------------------
@@ -144,11 +108,12 @@ $system_path = 'system';
  * use an absolute (full) server path.
  * For more info please see the user guide:
  *
- * https://codeigniter.com/user_guide/general/managing_apps.html
+ * https://codeigniter.com/userguide3/general/managing_apps.html
  *
  * NO TRAILING SLASH!
  */
-$application_folder = 'application';
+// $application_folder = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'application';
+$application_folder = __DIR__ . '/application';
 
 /*
  *---------------------------------------------------------------
@@ -241,9 +206,9 @@ if (($_temp = realpath($system_path)) !== FALSE) {
 }
 
 // Is the system path correct?
-if (!is_dir($system_path)) {
+if (! is_dir($system_path)) {
 	header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
-	echo 'Your system folder path does not appear to be set correctly. Please open the following file and correct this: ' . pathinfo(__FILE__, PATHINFO_BASENAME);
+	echo 'Your system folder path does not appear to be set correctly. [' . $system_path . '] Please open the following file and correct this: ' . pathinfo(__FILE__, PATHINFO_BASENAME);
 	exit(3); // EXIT_CONFIG
 }
 
@@ -252,6 +217,20 @@ if (!is_dir($system_path)) {
  *  Now that we know the path, set the main path constants
  * -------------------------------------------------------------------
  */
+/**
+ * Define APP_URL Dynamically
+ * Write this at the bottom of index.php
+ *
+ * Automatic base url
+ */
+
+$root = getenv('APP_URL') ?: '';
+if (PHP_SAPI !== 'cli') {
+	$root = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ||
+		(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+		? "https" : "http")
+		. "://" . $_SERVER['HTTP_HOST'] . str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
+}
 // application url
 define('BASE_URL', $root);
 
@@ -293,7 +272,7 @@ if (is_dir($application_folder)) {
 define('APPPATH', $application_folder . DIRECTORY_SEPARATOR);
 
 // The path to the "views" directory
-if (!isset($view_folder[0]) && is_dir(APPPATH . 'views' . DIRECTORY_SEPARATOR)) {
+if (! isset($view_folder[0]) && is_dir(APPPATH . 'views' . DIRECTORY_SEPARATOR)) {
 	$view_folder = APPPATH . 'views';
 } elseif (is_dir($view_folder)) {
 	if (($_temp = realpath($view_folder)) !== FALSE) {
@@ -318,6 +297,14 @@ if (!isset($view_folder[0]) && is_dir(APPPATH . 'views' . DIRECTORY_SEPARATOR)) 
 }
 
 define('VIEWPATH', $view_folder . DIRECTORY_SEPARATOR);
+
+/*
+ * --------------------------------------------------------------------
+ * LOAD THE COMPOSER PACKAGE
+ * --------------------------------------------------------------------
+ *
+ */
+// require_once 'vendor/autoload.php';
 
 /*
  * --------------------------------------------------------------------

@@ -80,10 +80,10 @@ $db['default'] = array(
 	'password' => getenv('DB_PASSWORD') ?: 'miecommerce',
 	'database' => getenv('DB_DATABASE') ?: 'midb',
 	'dbdriver' => getenv('DB_CONNECTION') ?: 'mysqli',
-	'port' =>  3306,
+	'port' => getenv('DB_PORT') ?: 3306,
 	'dbprefix' => '',
 	'pconnect' => FALSE,
-	'db_debug' => getenv('DB_DEBUG') ?: (ENVIRONMENT !== 'production'),
+	'db_debug' => (ENVIRONMENT !== 'production'),
 	'cache_on' => FALSE,
 	'cachedir' => '',
 	'char_set' => 'utf8',
@@ -91,7 +91,7 @@ $db['default'] = array(
 	'swap_pre' => '',
 	'encrypt' => FALSE,
 	'compress' => FALSE,
-	'stricton' => FALSE,
+	// 'stricton' => FALSE,
 	'failover' => array(),
 	'save_queries' => TRUE
 );
