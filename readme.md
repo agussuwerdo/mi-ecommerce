@@ -149,7 +149,7 @@ php index.php migration
 ![18.seller](https://github.com/agussuwerdo/images/blob/main/mi_ecommerce/18.seller%20sales%20report%20page.PNG?raw=true)  
 
 ## Live Demo
-- Live demo can be found at [live-demo](https://mi-ecommerce.kaosbandungan.co.id) 
+- Live demo can be found at [live-demo](https://mi-ecommerce-pi.vercel.app/) 
 
 ## Footnote
 - This project was made to complete task "Test Membuat System E-commerce mini berbasis WEB" from codehouse.com
