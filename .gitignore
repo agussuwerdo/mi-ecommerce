@@ -35,3 +35,6 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 
 !.htaccess
 !.gitkeep
+
+mi-ecommerce-db-data
+.vercel

@@ -60,26 +60,11 @@ function psFileKeyVal($wFile, $d = "=")
 
 /*
  * --------------------------------------------------------------------
- * LOAD .ENV file into constant variable
- * --------------------------------------------------------------------
- * 
- * .ENV variable can be accessed by constant ENV_ + Environment key
- * for example to load APP_URL env the constant is ENV_APP_URL
- * 
-*/
-$env = psFileKeyVal(dirname(__FILE__) . DIRECTORY_SEPARATOR . ".env");
-if (!$env) die('.env file not found');
-foreach ($env as $key => $val) {
-	define('ENV_' . $key, $val);
-}
-
-/*
- * --------------------------------------------------------------------
  * GET DEFAULT ROOT FOR Web
  * --------------------------------------------------------------------
  * 
 */
-$root = defined('ENV_APP_URL') ? ENV_APP_URL : '';
+$root = getenv('APP_URL') ?: '';
 if (PHP_SAPI !== 'cli') {
 	$root  = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $_SERVER['HTTP_HOST'];
 	$root .= str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);

@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------
@@ -75,14 +75,15 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => ENV_DB_HOST,
-	'username' => ENV_DB_USERNAME,
-	'password' => ENV_DB_PASSWORD,
-	'database' => ENV_DB_DATABASE,
-	'dbdriver' => ENV_DB_CONNECTION,
+	'hostname' => getenv('DB_HOST') ?: '127.0.0.1',
+	'username' => getenv('DB_USERNAME') ?: 'mi',
+	'password' => getenv('DB_PASSWORD') ?: 'miecommerce',
+	'database' => getenv('DB_DATABASE') ?: 'midb',
+	'dbdriver' => getenv('DB_CONNECTION') ?: 'mysqli',
+	'port' =>  3306,
 	'dbprefix' => '',
 	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
+	'db_debug' => getenv('DB_DEBUG') ?: (ENVIRONMENT !== 'production'),
 	'cache_on' => FALSE,
 	'cachedir' => '',
 	'char_set' => 'utf8',

@@ -1,0 +1,35 @@
+volumes:
+  mi_ecommerce_db_data:
+
+services:
+  mi_ecommerce_mysql:
+    image: mysql:8.0
+    restart: no
+    container_name: mi_ecommerce_db
+    env_file:
+      - .env
+    volumes:
+      - ./mi-ecommerce-db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+
+  mi_ecommerce_app:
+    build:
+      context: .
+      dockerfile: apache/Dockerfile
+    image: php:7.4-apache
+    container_name: mi_ecommerce_php
+    volumes:
+      - ./:/var/www/html
+      - ./apache/logs:/var/log/apache2
+    ports:
+      - "6060:80"
+    depends_on:
+      - mi_ecommerce_mysql
+    env_file:
+      - .env

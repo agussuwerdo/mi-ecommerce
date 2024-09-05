@@ -1,0 +1,73 @@
+[Thu Sep 05 03:23:10.120376 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.54 (Debian) PHP/7.4.33 configured -- resuming normal operations
+[Thu Sep 05 03:23:10.120581 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 05 03:23:15.580046 2024] [php7:notice] [pid 17] [client 192.168.65.1:53218] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127
+[Thu Sep 05 03:23:15.580046 2024] [php7:notice] [pid 18] [client 192.168.65.1:53219] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127
+[Thu Sep 05 03:23:15.580265 2024] [php7:notice] [pid 17] [client 192.168.65.1:53218] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127
+[Thu Sep 05 03:23:15.580356 2024] [php7:notice] [pid 18] [client 192.168.65.1:53219] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127
+[Thu Sep 05 03:23:15.580506 2024] [php7:warn] [pid 18] [client 192.168.65.1:53219] PHP Warning:  mkdir(): Invalid path in /var/www/html/system/core/Log.php on line 131
+[Thu Sep 05 03:23:15.580581 2024] [php7:notice] [pid 18] [client 192.168.65.1:53219] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 138
+[Thu Sep 05 03:23:15.580646 2024] [php7:notice] [pid 18] [client 192.168.65.1:53219] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 142
+[Thu Sep 05 03:23:15.580471 2024] [php7:warn] [pid 17] [client 192.168.65.1:53218] PHP Warning:  mkdir(): Invalid path in /var/www/html/system/core/Log.php on line 131
+[Thu Sep 05 03:23:15.581699 2024] [php7:notice] [pid 17] [client 192.168.65.1:53218] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 138
+[Thu Sep 05 03:23:15.581774 2024] [php7:notice] [pid 17] [client 192.168.65.1:53218] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 142
+[Thu Sep 05 03:23:18.343232 2024] [php7:notice] [pid 19] [client 192.168.65.1:53296] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127, referer: http://localhost:6060/
+[Thu Sep 05 03:23:18.849023 2024] [php7:notice] [pid 19] [client 192.168.65.1:53296] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127, referer: http://localhost:6060/
+[Thu Sep 05 03:23:18.854361 2024] [php7:warn] [pid 19] [client 192.168.65.1:53296] PHP Warning:  mkdir(): Invalid path in /var/www/html/system/core/Log.php on line 131, referer: http://localhost:6060/
+[Thu Sep 05 03:23:19.280868 2024] [php7:notice] [pid 19] [client 192.168.65.1:53296] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 138, referer: http://localhost:6060/
+[Thu Sep 05 03:23:19.283300 2024] [php7:notice] [pid 19] [client 192.168.65.1:53296] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 142, referer: http://localhost:6060/
+[Thu Sep 05 03:24:04.678365 2024] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Sep 05 03:24:15.009322 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.54 (Debian) PHP/7.4.33 configured -- resuming normal operations
+[Thu Sep 05 03:24:15.010126 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 05 03:24:17.847797 2024] [php7:notice] [pid 17] [client 192.168.65.1:53895] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127
+[Thu Sep 05 03:24:17.849571 2024] [php7:notice] [pid 17] [client 192.168.65.1:53895] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127
+[Thu Sep 05 03:24:17.850833 2024] [php7:warn] [pid 17] [client 192.168.65.1:53895] PHP Warning:  mkdir(): Invalid path in /var/www/html/system/core/Log.php on line 131
+[Thu Sep 05 03:24:17.851095 2024] [php7:notice] [pid 17] [client 192.168.65.1:53895] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 138
+[Thu Sep 05 03:24:17.851207 2024] [php7:notice] [pid 17] [client 192.168.65.1:53895] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 142
+[Thu Sep 05 03:24:19.302519 2024] [php7:notice] [pid 19] [client 192.168.65.1:53967] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127, referer: http://localhost:6060/
+[Thu Sep 05 03:24:19.302755 2024] [php7:notice] [pid 19] [client 192.168.65.1:53967] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127, referer: http://localhost:6060/
+[Thu Sep 05 03:24:19.302886 2024] [php7:warn] [pid 19] [client 192.168.65.1:53967] PHP Warning:  mkdir(): Invalid path in /var/www/html/system/core/Log.php on line 131, referer: http://localhost:6060/
+[Thu Sep 05 03:24:19.303163 2024] [php7:notice] [pid 19] [client 192.168.65.1:53967] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 138, referer: http://localhost:6060/
+[Thu Sep 05 03:24:19.303659 2024] [php7:notice] [pid 19] [client 192.168.65.1:53967] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 142, referer: http://localhost:6060/
+[Thu Sep 05 03:24:21.777434 2024] [php7:notice] [pid 20] [client 192.168.65.1:53969] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127
+[Thu Sep 05 03:24:21.779625 2024] [php7:notice] [pid 20] [client 192.168.65.1:53969] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127
+[Thu Sep 05 03:24:21.779812 2024] [php7:warn] [pid 20] [client 192.168.65.1:53969] PHP Warning:  mkdir(): Invalid path in /var/www/html/system/core/Log.php on line 131
+[Thu Sep 05 03:24:21.779965 2024] [php7:notice] [pid 20] [client 192.168.65.1:53969] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 138
+[Thu Sep 05 03:24:21.780082 2024] [php7:notice] [pid 20] [client 192.168.65.1:53969] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 142
+[Thu Sep 05 03:24:22.102355 2024] [php7:notice] [pid 21] [client 192.168.65.1:53970] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127, referer: http://localhost:6060/
+[Thu Sep 05 03:24:22.102594 2024] [php7:notice] [pid 21] [client 192.168.65.1:53970] PHP Notice:  Undefined index: log_path in /var/www/html/system/core/Log.php on line 127, referer: http://localhost:6060/
+[Thu Sep 05 03:24:22.102744 2024] [php7:warn] [pid 21] [client 192.168.65.1:53970] PHP Warning:  mkdir(): Invalid path in /var/www/html/system/core/Log.php on line 131, referer: http://localhost:6060/
+[Thu Sep 05 03:24:22.102869 2024] [php7:notice] [pid 21] [client 192.168.65.1:53970] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 138, referer: http://localhost:6060/
+[Thu Sep 05 03:24:22.103012 2024] [php7:notice] [pid 21] [client 192.168.65.1:53970] PHP Notice:  Undefined index: log_threshold in /var/www/html/system/core/Log.php on line 142, referer: http://localhost:6060/
+[Thu Sep 05 03:26:26.163736 2024] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Sep 05 03:26:28.994447 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.54 (Debian) PHP/7.4.33 configured -- resuming normal operations
+[Thu Sep 05 03:26:29.013415 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 05 03:27:42.096261 2024] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Sep 05 03:27:44.296738 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.54 (Debian) PHP/7.4.33 configured -- resuming normal operations
+[Thu Sep 05 03:27:44.298835 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 05 03:28:50.019673 2024] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Sep 05 03:28:52.485486 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.54 (Debian) PHP/7.4.33 configured -- resuming normal operations
+[Thu Sep 05 03:28:52.486231 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 05 03:31:19.460728 2024] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Sep 05 03:31:22.032200 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.54 (Debian) PHP/7.4.33 configured -- resuming normal operations
+[Thu Sep 05 03:31:22.032708 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 05 03:32:04.783870 2024] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Sep 05 03:32:09.406699 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.54 (Debian) PHP/7.4.33 configured -- resuming normal operations
+[Thu Sep 05 03:32:09.406928 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 05 03:32:21.539459 2024] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Sep 05 03:32:25.239074 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.54 (Debian) PHP/7.4.33 configured -- resuming normal operations
+[Thu Sep 05 03:32:25.240361 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 05 03:32:58.270190 2024] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Sep 05 03:33:02.141827 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.54 (Debian) PHP/7.4.33 configured -- resuming normal operations
+[Thu Sep 05 03:33:02.142186 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 05 03:33:22.608192 2024] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Sep 05 03:33:26.505152 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.54 (Debian) PHP/7.4.33 configured -- resuming normal operations
+[Thu Sep 05 03:33:26.505672 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 05 03:35:15.302135 2024] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Sep 05 03:35:19.363126 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.54 (Debian) PHP/7.4.33 configured -- resuming normal operations
+[Thu Sep 05 03:35:19.364038 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 05 03:39:46.161757 2024] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Sep 05 03:39:52.302051 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.54 (Debian) PHP/7.4.33 configured -- resuming normal operations
+[Thu Sep 05 03:39:52.302278 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 05 03:44:29.502137 2024] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Sep 05 03:44:33.554176 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.54 (Debian) PHP/7.4.33 configured -- resuming normal operations
+[Thu Sep 05 03:44:33.554724 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
