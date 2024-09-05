@@ -1,0 +1,46 @@
+version: 2.1
+
+jobs:
+  deploy:
+    docker:
+      - image: agussuwerdo/circleci-php:latest
+    steps:
+      - checkout
+
+      # Cache Composer dependencies
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "src/composer.lock" }}
+            - composer-v1-
+
+      - run:
+          name: Install Composer Dependencies
+          command: cd src && composer install --no-interaction --prefer-dist
+
+      - save_cache:
+          paths:
+            - src/vendor
+          key: composer-v1-{{ checksum "src/composer.lock" }}
+
+      - run:
+          name: Deploy to Vercel
+          command: |
+            if [ "$CIRCLE_BRANCH" == "main" ] || [ "$CIRCLE_BRANCH" == "master" ]; then
+              npx vercel --prod src --yes --token $VERCEL_TOKEN \
+              --env VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID \
+              --env VERCEL_ORG_ID=$VERCEL_ORG_ID
+            elif [ "$CIRCLE_BRANCH" == "dev" ]; then
+              npx vercel dev src --yes --token $VERCEL_TOKEN \
+              --env VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID \
+              --env VERCEL_ORG_ID=$VERCEL_ORG_ID
+            else
+              npx vercel src --yes --token $VERCEL_TOKEN \
+              --env VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID \
+              --env VERCEL_ORG_ID=$VERCEL_ORG_ID
+            fi
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - deploy
