@@ -72,7 +72,18 @@ class Master extends MY_Controller
 	public function product_input($enc_id = '')
 	{
 		$list_category = $this->category_model->find();
-		$rowdata = $this->product_model->find_one(array('item_id' => decode($enc_id)));
+		if ($enc_id === '') {
+			$rowdata = $this->product_model->default_fields();
+		} else {
+			$item_id = decode($enc_id);
+			if (!ctype_digit((string) $item_id) || (int) $item_id < 1) {
+				show_error('Invalid product ID.', 400);
+			}
+			$rowdata = $this->product_model->find_one(array('item_id' => (int) $item_id));
+			if (!$rowdata['item_id']) {
+				show_404();
+			}
+		}
 		$data = array(
 			'content' => 'master/product/input',
 			'rowdata' => $rowdata,
@@ -85,7 +96,11 @@ class Master extends MY_Controller
 	{
 		$this->db->trans_start();
 		$data = array();
-		$data['item_id'] = decode($this->input->post('item_id')) ?: 0;
+		$decoded_id = decode($this->input->post('item_id') ?: '');
+		if ($decoded_id !== '' && (!ctype_digit((string) $decoded_id) || (int) $decoded_id < 1)) {
+			error('Invalid product ID');
+		}
+		$data['item_id'] = (int) $decoded_id;
 		$data['sku'] = $this->input->post('sku');
 		$data['name'] = $this->input->post('name');
 		$data['description'] = $this->input->post('description');
@@ -116,26 +131,30 @@ class Master extends MY_Controller
 		if ($get_existing['item_id']) {
 			// check existing sku
 			$where_sku_exists = array();
-			$where_sku_exists['item_id != ' . $this->db->protect_identifiers($data['item_id'])] = null;
-			$where_sku_exists['sku = ' . $this->db->protect_identifiers($data['sku'])] = null;
+			$where_sku_exists['item_id !='] = $data['item_id'];
+			$where_sku_exists['sku'] = $data['sku'];
 			$get_existing_sku = $this->product_model->find_one($where_sku_exists);
 
 			if ($get_existing_sku['item_id'])
 				error('SKU already used by [' . $get_existing_sku['name'] . ']');
 			// update data
 			$action = 'Update';
-			$date['update_time'] = date('Y-m-d H:i:s');
+			$data['updated_at'] = date('Y-m-d H:i:s');
 			$this->product_model->update($data, $data['item_id']);
 		} else {
+			if ($data['item_id'] > 0) {
+				error('Product not found');
+			}
 			// check existing sku
 			$where_sku_exists = array();
-			$where_sku_exists['sku = ' . $this->db->protect_identifiers($data['sku'])] = null;
+			$where_sku_exists['sku'] = $data['sku'];
 			$get_existing_sku = $this->product_model->find_one($where_sku_exists);
 			if ($get_existing_sku['item_id'])
 				error('SKU already used by [' . $get_existing_sku['name'] . ']');
 			/// insert data
 			$action = 'Insert';
-			$date['create_time'] = date('Y-m-d H:i:s');
+			unset($data['item_id']); // Let PostgreSQL's sequence assign the ID.
+			$data['created_at'] = date('Y-m-d H:i:s');
 			$this->product_model->insert($data);
 		}
 

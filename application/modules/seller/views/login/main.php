@@ -63,7 +63,7 @@
 				</form>
 
 				<div class="social-auth-links text-center mt-2 mb-3">
-					<p> default login : <strong>admin@mi.com</strong> - <strong>admin</strong> </p>
+					<p>Use your seller email and the password chosen during database setup.</p>
 				</div>
 				<!-- /.social-auth-links -->
 			</div>

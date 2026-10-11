@@ -85,8 +85,8 @@ class Product extends MY_Controller
 		if (!$product['item_id'])
 			return_404();
 
-		$this->product_model->set_select('DISTINCT(item_id),name,price,discount,slug');
-		$this->product_model->set_order('rand()');
+		$this->product_model->set_select('item_id,name,price,discount,slug');
+		$this->product_model->set_order(array('item_id' => 'RANDOM'));
 		$this->product_model->set_limit(3);
 		$random_product = $this->product_model->find();
 

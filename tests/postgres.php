@@ -61,12 +61,52 @@ require BASEPATH.'core/Model.php';
 require APPPATH.'core/MY_Model.php';
 require APPPATH.'models/Sales_model.php';
 require APPPATH.'models/Sales_item_model.php';
+require APPPATH.'models/Product_model.php';
+require APPPATH.'libraries/Seller_auth.php';
+require APPPATH.'models/Category_model.php';
+
+class TestControllerResponse extends RuntimeException {
+    public $successful;
+    public function __construct($message, $successful) { parent::__construct($message); $this->successful = $successful; }
+}
+function success($message = '') { throw new TestControllerResponse($message, TRUE); }
+function error($message = '') { throw new TestControllerResponse($message, FALSE); }
+require APPPATH.'helpers/general_helper.php';
+class MY_Controller {
+    public $db;
+    public $product_model;
+    public $category_model;
+    public $input;
+    public $load;
+}
+require APPPATH.'modules/seller/controllers/Master.php';
+class TestMaster extends Master {
+    public function __construct() {}
+}
+class TestProductInput {
+    public $data;
+    public function post($name) { return isset($this->data[$name]) ? $this->data[$name] : NULL; }
+}
+class TestProductView {
+    public $data;
+    public function view($name, $data) { $this->data = $data; }
+}
+
+// Exercise the real authentication query using an in-memory session sink.
+class TestSellerAuth extends Seller_auth {
+    public function __construct() { $this->CI = get_instance(); }
+}
+class TestLoginSession {
+    public $data = array();
+    public function set_userdata($data) { $this->data = $data; }
+}
 
 check($db->trans_begin(), 'Cannot start test transaction');
 try {
     $schema = 'mi_test_'.bin2hex(random_bytes(8));
     check($db->simple_query('CREATE SCHEMA '.$schema), 'Cannot create test schema');
     check($db->simple_query('SET LOCAL search_path TO '.$schema), 'Cannot select test schema');
+    $db->schema = $schema;
     foreach (glob(APPPATH.'migrations/*.php') as $file) {
         require $file;
         $class = 'Migration_'.substr(basename($file, '.php'), 15);
@@ -74,6 +114,51 @@ try {
         check($db->trans_status(), 'Migration failed: '.basename($file));
     }
     check($db->count_all('products') === 14, 'Product seeds missing');
+    $products = new Product_model();
+    $products->set_select('item_id,name,price,discount,slug');
+    $products->set_order(array('item_id' => 'RANDOM'));
+    $products->set_limit(3);
+    $recommendations = $products->find()->result_array();
+    check(count($recommendations) === 3, 'Product/cart recommendations failed');
+    check(count(array_unique(array_column($recommendations, 'item_id'))) === 3, 'Recommendations must be unique');
+
+    $master = new TestMaster();
+    $master->db = $db;
+    $master->product_model = new Product_model();
+    $master->category_model = new Category_model();
+    $master->input = new TestProductInput();
+    $master->load = new TestProductView();
+    $master->product_input();
+    check($master->load->data['rowdata']['item_id'] === '', 'New-product form should use empty defaults');
+    $master->product_input(encode('19'));
+    check((int) $master->load->data['rowdata']['item_id'] === 19, 'Padded Base64 edit ID should load the product');
+    $master->input->data = array('item_id' => '', 'sku' => "TEST'SKU", 'name' => 'Controller test',
+        'description' => 'Test product', 'price' => '1000', 'discount' => '0', 'stock' => '2', 'weight' => '100',
+        'f_category_code' => 'pakaian', 'f_sub_category_code' => 'kaos-pria');
+    try { $master->save_product(); throw new RuntimeException('Missing save response'); }
+    catch (TestControllerResponse $response) { check($response->successful, $response->getMessage()); }
+    $created = $master->product_model->find_one(array('sku' => "TEST'SKU"));
+    check((int) $created['item_id'] > 25 && !empty($created['created_at']), 'New product should receive a generated ID and timestamp');
+    $master->input->data['item_id'] = encode($created['item_id']);
+    $master->input->data['name'] = 'Updated controller test';
+    try { $master->save_product(); throw new RuntimeException('Missing update response'); }
+    catch (TestControllerResponse $response) { check($response->successful, $response->getMessage()); }
+    $updated = $master->product_model->find_one(array('item_id' => $created['item_id']));
+    check($updated['name'] === 'Updated controller test' && !empty($updated['updated_at']), 'Product update failed');
+    $master->input->data['item_id'] = '';
+    try { $master->save_product(); throw new RuntimeException('Duplicate SKU accepted'); }
+    catch (TestControllerResponse $response) {
+        check(!$response->successful && strpos($response->getMessage(), 'SKU already used') !== FALSE, 'Duplicate SKU should be rejected');
+        $db->trans_rollback(); // Balance the rejected controller request's nested transaction.
+    }
+
+    $GLOBALS['test_ci']->session = new TestLoginSession();
+    $auth = new TestSellerAuth();
+    check($auth->do_login(array('email' => 'admin@mi.com', 'pass' => 'wrong-password'))['status'] === 0, 'Incorrect password accepted');
+    $chosen_password = bin2hex(random_bytes(16));
+    check($db->where('user_id', 1)->update('users', array('enc_pass' => md5($chosen_password))), 'Cannot set test seller password');
+    check($auth->do_login(array('email' => 'admin@mi.com', 'pass' => $chosen_password))['status'] === 1, 'Seller login with chosen password failed');
+    check($GLOBALS['test_ci']->session->data['is_seller_authorized'] === TRUE, 'Seller authorization not recorded');
     check($db->insert('products', array('name' => 'Postgres test')), 'Product insert failed');
     check($db->insert_id() > 25, 'Product sequence did not advance past seed IDs');
     check($db->insert('users', array('email' => 'test@example.invalid')), 'User insert failed');
@@ -103,7 +188,7 @@ try {
     check($session->write('integration-test', 'cart|s:4:"test";'), 'Session write failed');
     check($session->read('integration-test') === 'cart|s:4:"test";', 'Session round trip failed');
     check($session->close(), 'Session unlock failed');
-    echo "PASS: all migrations, seeds, generated IDs, daily/monthly reports, joins, session storage and locks\n";
+    echo "PASS: migrations, seeds, recommendations, product create/edit/save, SKU validation, seller authentication, generated IDs, reports, joins, sessions and locks\n";
 } finally {
     $db->trans_rollback();
     $db->close();

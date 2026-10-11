@@ -123,6 +123,6 @@ if ($postgres_url) {
 		'password' => isset($postgres_parts['pass']) ? rawurldecode($postgres_parts['pass']) : '',
 		'database' => rawurldecode(ltrim($postgres_parts['path'], '/')),
 		'dbcollat' => '',
-		'schema' => '', // Use the default public schema without session-level SET.
+		'schema' => 'public', // Required for CodeIgniter's column/default-field discovery.
 	));
 }
