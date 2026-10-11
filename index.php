@@ -86,6 +86,17 @@ switch (ENVIRONMENT) {
 		exit(1); // EXIT_ERROR
 }
 
+// Explicit diagnostic switch, including on Vercel with CI_ENV=production.
+$debug_override = getenv('APP_DEBUG');
+if ($debug_override !== FALSE) {
+	$debug_enabled = filter_var($debug_override, FILTER_VALIDATE_BOOLEAN);
+	ini_set('display_errors', $debug_enabled ? '1' : '0');
+	if ($debug_enabled) {
+		// Older CI3 code emits PHP 8 deprecations; keep actual errors visible.
+		error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+	}
+}
+
 /*
  *---------------------------------------------------------------
  * SYSTEM DIRECTORY NAME

@@ -93,6 +93,13 @@ project: environment variable changes do not update existing deployments.
 
 Verification (PHP CLI):
 
+For temporary diagnosis, `APP_DEBUG=true` enables visible PHP exceptions,
+file/line details, backtraces, and database error pages even with
+`CI_ENV=production`. It is currently enabled in `vercel.json` to troubleshoot
+the blank 500 page. After diagnosis, set `APP_DEBUG=false` in Vercel's environment
+variables (or change the value in `vercel.json`) and redeploy. Detailed errors
+can expose SQL, file paths, and application data to visitors.
+
 ```bash
 php tests/postgres.php
 ```

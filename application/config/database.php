@@ -83,7 +83,9 @@ $db['default'] = array(
 	'port' => getenv('DB_PORT') ?: 3306,
 	'dbprefix' => '',
 	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
+	'db_debug' => getenv('APP_DEBUG') !== FALSE
+		? filter_var(getenv('APP_DEBUG'), FILTER_VALIDATE_BOOLEAN)
+		: (ENVIRONMENT !== 'production'),
 	'cache_on' => FALSE,
 	'cachedir' => '',
 	'char_set' => 'utf8',

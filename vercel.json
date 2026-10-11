@@ -1,4 +1,7 @@
 {
+  "env": {
+    "APP_DEBUG": "true"
+  },
   "functions": {
     "api/*.php": {
       "runtime": "vercel-php@0.7.1"

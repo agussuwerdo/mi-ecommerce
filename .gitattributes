@@ -1,0 +1,2 @@
+# Match .editorconfig and preserve LF on every platform.
+* text=auto eol=lf
