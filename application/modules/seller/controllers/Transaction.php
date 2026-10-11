@@ -43,7 +43,7 @@ class Transaction extends MY_Controller
 
 		$where["(
 			tbl.invoice_number LIKE '%" . $this->db->escape_like_str($searchValue) . "%' ESCAPE '!'
-			OR user.name LIKE '%" . $this->db->escape_like_str($searchValue) . "%' ESCAPE '!'
+			OR customer_user.name LIKE '%" . $this->db->escape_like_str($searchValue) . "%' ESCAPE '!'
 		)"] = NULL;
 
 		$this->sales_model->set_where($where);

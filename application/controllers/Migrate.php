@@ -5,6 +5,9 @@ class Migrate extends CI_Controller
   public function __construct()
   {
     parent::__construct();
+    if (!$this->input->is_cli_request()) {
+      show_404();
+    }
     $this->load->library('migration');
   }
 
@@ -15,7 +18,11 @@ class Migrate extends CI_Controller
     $migrations = $this->migration->find_migrations() ?: [];
 
     // Get the highest version number
-    $latest_version = max(array_keys($migrations)) ?: '000';
+    if (!$migrations) {
+      echo 'No migrations found.';
+      return;
+    }
+    $latest_version = max(array_keys($migrations));
 
     // Run the migration to the latest version
     if ($this->migration->version($latest_version) === FALSE) {

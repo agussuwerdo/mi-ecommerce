@@ -24,7 +24,7 @@ class Migration_create_sessions_table extends CI_Migration {
                 'default' => 0
             ),
             'data' => array(
-                'type' => 'BLOB',
+                'type' => ($this->db->dbdriver === 'postgre' ? 'TEXT' : 'BLOB'),
                 'null' => FALSE
             )
         ));
@@ -39,7 +39,9 @@ class Migration_create_sessions_table extends CI_Migration {
         $this->dbforge->create_table('ci_sessions', TRUE);
 
         // Set the storage engine to InnoDB for performance
-        $this->db->query('ALTER TABLE `ci_sessions` ENGINE = InnoDB');
+        if ($this->db->dbdriver === 'mysqli') {
+            $this->db->query('ALTER TABLE `ci_sessions` ENGINE = InnoDB');
+        }
     }
 
     public function down()

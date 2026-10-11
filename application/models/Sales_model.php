@@ -7,12 +7,12 @@ class Sales_model extends MY_Model
 	function __construct()
 	{
 		parent::__construct();
-		$this->set_select('tbl.*,user.name');
+		$this->set_select('tbl.*,customer_user.name');
 	}
 
 	function _join()
 	{
-		$this->db->join('users user', 'tbl.f_customer_id = user.user_id', 'left');
+		$this->db->join('users customer_user', 'tbl.f_customer_id = customer_user.user_id', 'left');
 	}
 
 	function count_report_daily()
@@ -83,8 +83,12 @@ class Sales_model extends MY_Model
 	{
 		$this->db->select('sum( quantity_total ) AS quantity_total', false);
 		$this->db->select('sum( retail_sales_total ) AS retail_sales_total', false);
-		$this->db->select('MONTHNAME( sales_date ) AS month_name', false);
-		$this->db->select('YEAR( sales_date ) AS year_name', false);
+		$this->db->select($this->db->dbdriver === 'postgre'
+			? "TO_CHAR(sales_date, 'FMMonth') AS month_name"
+			: 'MONTHNAME(sales_date) AS month_name', false);
+		$this->db->select($this->db->dbdriver === 'postgre'
+			? 'EXTRACT(YEAR FROM sales_date) AS year_name'
+			: 'YEAR(sales_date) AS year_name', false);
 
 		$this->db->group_by(array('year_name','month_name'));
 		$compiled_select = $this->db->get_compiled_select($this->table_name() . ' t1');
@@ -112,8 +116,12 @@ class Sales_model extends MY_Model
 	{
 		$this->db->select('sum( quantity_total ) AS quantity_total', false);
 		$this->db->select('sum( retail_sales_total ) AS retail_sales_total', false);
-		$this->db->select('MONTHNAME( sales_date ) AS month_name', false);
-		$this->db->select('YEAR( sales_date ) AS year_name', false);
+		$this->db->select($this->db->dbdriver === 'postgre'
+			? "TO_CHAR(sales_date, 'FMMonth') AS month_name"
+			: 'MONTHNAME(sales_date) AS month_name', false);
+		$this->db->select($this->db->dbdriver === 'postgre'
+			? 'EXTRACT(YEAR FROM sales_date) AS year_name'
+			: 'YEAR(sales_date) AS year_name', false);
 
 		$this->db->group_by(array('year_name','month_name'));
 		$compiled_select = $this->db->get_compiled_select($this->table_name() . ' t1');

@@ -95,3 +95,32 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+
+// Prefer the direct endpoint: database-backed sessions use session-level
+// advisory locks, which are incompatible with PgBouncer transaction pooling.
+$postgres_url = getenv('DATABASE_URL_UNPOOLED') ?: getenv('POSTGRES_URL_NON_POOLING')
+	?: getenv('DATABASE_URL') ?: getenv('POSTGRES_URL');
+
+if ($postgres_url) {
+	$postgres_parts = parse_url($postgres_url);
+	if ($postgres_parts === FALSE || !isset($postgres_parts['scheme'], $postgres_parts['host'], $postgres_parts['path'])
+		|| !in_array($postgres_parts['scheme'], array('postgres', 'postgresql'), TRUE)) {
+		throw new RuntimeException('Invalid PostgreSQL connection URL. Check the database environment variables.');
+	}
+	if (strpos($postgres_parts['host'], '-pooler.') !== FALSE) {
+		throw new RuntimeException('Set DATABASE_URL_UNPOOLED to the direct Neon endpoint. Database sessions require session-level locks.');
+	}
+	// Pass the URI straight to libpq, preserving encoded credentials, TLS and
+	// channel_binding options without exposing them in application source.
+	$db['default'] = array_merge($db['default'], array(
+		'dsn' => $postgres_url,
+		'dbdriver' => 'postgre',
+		'hostname' => $postgres_parts['host'],
+		'port' => isset($postgres_parts['port']) ? $postgres_parts['port'] : 5432,
+		'username' => isset($postgres_parts['user']) ? rawurldecode($postgres_parts['user']) : '',
+		'password' => isset($postgres_parts['pass']) ? rawurldecode($postgres_parts['pass']) : '',
+		'database' => rawurldecode(ltrim($postgres_parts['path'], '/')),
+		'dbcollat' => '',
+		'schema' => '', // Use the default public schema without session-level SET.
+	));
+}

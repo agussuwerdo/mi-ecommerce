@@ -36,15 +36,71 @@ cp .env.example .env
 
 - Migrate the database:
 
-### Migrate by Browser
-```bash
-http://localhost/mi-ecommerce/migration
-```
-
 ### Migrate by CLI
 ```bash
-php index.php migration
+php index.php migrate
 ```
+
+Migrations are CLI-only, including version changes and listing.
+The application reads process environment variables with `getenv()`; copying
+`.env` alone does not load it. Export variables in your shell or use a local
+environment loader. Vercel injects its configured variables automatically.
+
+### Neon PostgreSQL on Vercel
+
+In Vercel → Project → Settings → Environment Variables, configure:
+
+| Name | Value |
+| --- | --- |
+| `DATABASE_URL_UNPOOLED` | Neon's direct PostgreSQL URL, with `sslmode=require` (optionally `connect_timeout=15`) |
+| `CI_ENV` | `production` |
+| `APP_URL` | `https://mi.werdev.my.id` |
+
+Apply these to Production and, if needed, Preview using a separate preview
+database. If the Neon integration already injects `DATABASE_URL_UNPOOLED`, keep
+that variable rather than creating a duplicate. Credentials belong only in
+environment variables, never in Git. URL-encode special characters in passwords.
+
+The config also accepts `POSTGRES_URL_NON_POOLING`, `DATABASE_URL`, or
+`POSTGRES_URL`, in that order, after `DATABASE_URL_UNPOOLED`. Any selected URL
+must use the direct endpoint. The app's database session driver uses PostgreSQL
+session-level advisory locks, incompatible with Neon's transaction pooler.
+Pooled hostnames are rejected explicitly. The integration's other variables
+(`PG*`, Prisma URLs, and no-SSL URLs) are not required by this configuration.
+Legacy `DB_*` settings are used only when none of the URL variables is present.
+
+Requirements: PHP with the `pgsql` extension and outbound TLS access to Neon on
+port 5432. The Vercel PHP community runtime provides PostgreSQL extensions;
+verify `extension_loaded('pgsql')` in the deployed runtime if connection fails.
+Keep database error display disabled in production. No JavaScript Neon client
+or Prisma dependency is needed.
+
+Before deploying, initialize the empty Neon database once from a trusted local
+shell with PHP and `pgsql`. Export `DATABASE_URL_UNPOOLED` there, then run:
+
+```bash
+php index.php migrate
+```
+
+This creates all tables and seeds the repository's sample products, categories,
+and seller account. It cannot recover the former MySQL server's data; restoring
+that requires a backup/export. The existing demo seller is `admin@mi.com` with
+password `admin`; replace its `enc_pass` in the Neon SQL editor with the MD5 hash
+of a new password before exposing the deployment (the existing authentication
+code expects MD5). Never run migrations from a public web route or on each request.
+After configuring variables and initializing the schema, redeploy the updated
+project: environment variable changes do not update existing deployments.
+
+Verification (PHP CLI):
+
+```bash
+php tests/postgres.php
+```
+
+Without a database URL this checks configuration behavior. With
+`DATABASE_URL_UNPOOLED` set, it additionally runs every migration, verifies
+generated IDs, sales reports, and database sessions inside a temporary schema
+and transaction, then rolls everything back. It does not initialize production.
 
 ## Demo
 # Images
